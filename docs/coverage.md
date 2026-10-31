@@ -71,6 +71,8 @@ npm run check
 
 Update this map when the checks change. Update `results/eval-results.json` only if the bundled fixture report changes. Expected fixture rejections are successful harness assertions, while an inconsistent user-supplied CLI response exits 1.
 
+`npm run check:docs` guards the marked README summary/answer JSON and the recorded fixture report against current results. The documentation regression deliberately changes counts, an answer, markers, JSON syntax, and the recorded report to verify that drift fails. It does not establish coverage of unmarked examples or prose claims. The full `npm run check` command includes this guard.
+
 ## Remaining coverage limits
 
 - The exact upper limits and just-over-limit combinations for quantity, line count, and snapshot count are not comprehensively paired. Monetary representation has a maximum/next-cent regression, but exhaustive combinations of amounts, quantities, and limits are not covered.

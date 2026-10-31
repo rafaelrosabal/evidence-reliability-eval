@@ -12,7 +12,7 @@ Requires Node.js 22 or later. No package install, dependencies, credentials, API
 npm run check
 ```
 
-That one command runs the unit tests and then prints the evaluation report. For separate steps:
+That one command runs the unit tests, checks the documented JSON examples and recorded results, and then prints the evaluation report. For separate steps:
 
 ```sh
 npm test
@@ -21,9 +21,11 @@ npm run eval
 
 Both commands exit with code 0 on success. The eval exits with code 1 if any actual validity/error-code result differs from its declared expectation. Intentionally rejected candidates are expected eval outcomes; they are **not unit-test failures**. A test deliberately mislabels a control to prove that the harness detects a mismatch.
 
-Actual verification on 2026-10-30, Node.js v24.15.0: **80 tests passed, 0 failed, 0 skipped**, including eight CLI regression tests; bundled eval: **8 scenarios, 17 controls, 8 accepted, 9 rejected as intended, 0 mismatches**. See `results/eval-results.json` for every candidate decision. Test timings vary and are not versioned; the eval JSON is deterministic.
+Actual verification on 2026-10-31, Node.js v24.15.0: **81 tests passed, 0 failed, 0 skipped**, including eight CLI regression tests; bundled eval: **8 scenarios, 17 controls, 8 accepted, 9 rejected as intended, 0 mismatches**. See `results/eval-results.json` for every candidate decision. Test timings vary; the eval JSON is deterministic. This was local verification on Windows, not a CI or cross-platform run.
 
 Actual summary from `npm run eval` (per-control results omitted):
+
+<!-- verify:bundled-summary -->
 
 ```json
 {
@@ -48,6 +50,8 @@ npm run evaluate -- examples/answer.json
 
 The example exits with code 0 and prints:
 
+<!-- verify:answer-result -->
+
 ```json
 {
   "valid": true,
@@ -71,6 +75,16 @@ The input limit is **1 MiB (1,048,576 UTF-8 bytes)**. Only regular files or stan
 For error-code recovery steps, schema bounds, and the distinction between exact arithmetic and a representable response total, see [Input limits and error recovery](docs/input-errors.md).
 
 This remains an offline consistency checker for synthetic structured data. It does not call a model or verify upstream source truth. The bundled eval's expected rejections and this command's failure exit codes serve different purposes.
+
+## Keep documented output reproducible
+
+```sh
+npm run check:docs
+```
+
+This offline check compares the two marked JSON examples above with the current bundled summary and the evaluated `examples/answer.json` response. It also checks the full recorded `results/eval-results.json` against a fresh fixture run. It exits 0 on agreement, 1 for drift, missing/duplicate markers, missing code blocks or invalid marked JSON, and 2 if a required source file cannot be read or parsed.
+
+When results intentionally change, review the behavior first, then update the corresponding example or recorded report. Keep each `<!-- verify:... -->` source marker immediately before its JSON code block. This check validates those declared outputs, not every prose claim, shell command, platform, or model-quality claim. The reported test run is local verification; no CI or cross-platform run is implied.
 
 ## Eight synthetic scenarios
 

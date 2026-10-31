@@ -8,8 +8,9 @@
   "scripts": {
     "eval": "node src/run.js",
     "evaluate": "node src/evaluate-input.js",
+    "check:docs": "node scripts/check-docs.js",
     "test": "node --test",
-    "check": "node --test && node src/run.js"
+    "check": "node --test && node scripts/check-docs.js && node src/run.js"
   },
   "engines": { "node": ">=22" }
 }
